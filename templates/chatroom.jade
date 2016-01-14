@@ -5,29 +5,25 @@ html
 		link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous", rel='stylesheet', type='text/css')
 	body
 		.container 
-			.row 
-				.col-md-12 
-					h1 FSE Chatroom 
-			#join.row 
+			#join.row(style="margin-top:100px")
+				.col-md-4 
 				.col-md-4 
 					.panel.panel-info
-						.panel-heading Choose a nickname 
+						.panel-heading FSE Chatroom 
 						.panel-body 
-							input(type="text" class="form-control" id="nickname" placeholder="Nickname")
-						.panel-footer
+							input(type="text" class="form-control" id="nickname" placeholder="Choose a Nickname")
+						.panel-footer(style="text-align:center")
 							form#join-form
 								button(class="btn btn-info" type="submit") Join Chatroom
+				.col-md-4 
 			#chatroom.row 
 				.col-md-4 
 					.panel.panel-info
 						.panel-heading Connected Users 
 						.panel-body(style="height:400px;max-height: 800;overflow-y: auto;") 
-							ul.media-list
-								li.media
-									.media-body
-										h5 Alex Deo 
+							ul#users.media-list
 						.panel-footer
-							a#leave(href="#") Logout 
+							a#disconnect(href="#") Logout 
 				.col-md-8 
 					.panel.panel-info
 						.panel-heading Messages

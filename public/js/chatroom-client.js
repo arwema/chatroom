@@ -11,8 +11,8 @@ $('#chatroom').hide();
     return false;
   });
   
-  $('#leave').click(function(){
-                socket.emit('disconnect', $('#nickname').val());
+  $('#disconnect').click(function(){
+                socket.emit('user disconnected', $('#nickname').val());
                 $('#join').show();
                 $('#chatroom').hide();
                 return false;
@@ -24,13 +24,20 @@ $('#chatroom').hide();
                 $('#nickname').val(nickname);
         }
         else{
-                $('#messages').append($('<li>').text(nickname+" joined"));
+                $('#messages').append("<li><span class='label label-success'>"+nickname+" joined</span></li>");
         }
   });
-  socket.on('disconnect', function(nickname){
+  socket.on('update users', function(users){
+	$('#users').empty();
+	$.each(users, function( index, user) {
+                $('#users').append("<li class='media'><div class='media-body'>"+user+"</div></li>");
+	});
+
+  });
+  socket.on('user disconnected', function(nickname){
         //alert(nickname);
         if (nickname != $('#nickname').val()){
-                $('#messages').append($('<li>').text(nickname+" joined"));
+                $('#messages').append("<li><span class='label label-danger'>"+nickname+" left</span></li>");
         }
 
   });

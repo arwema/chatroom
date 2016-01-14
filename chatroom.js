@@ -41,7 +41,7 @@ io.on('connection', function(socket){
         users[socket.id] = name;
         socket.emit("update", "You have connected to the server.");
         io.sockets.emit("user connected", name)
-        io.sockets.emit("update-users", users);
+        io.sockets.emit("update users", users);
   	//load existing messages from the DB
   	db.each("SELECT * FROM messages", function(err, message) {
   		socket.emit('chat message', message);
@@ -49,11 +49,11 @@ io.on('connection', function(socket){
 	console.log(name+" connected");
     });
 
-  socket.on("disconnect", function(){
+  socket.on("user disconnected", function(){
     	console.log('user disconnected');
-        io.sockets.emit("disconnect", users[socket.id]);
+        io.sockets.emit("user disconnected", users[socket.id]);
         delete users[socket.id];
-        io.sockets.emit("update-users", users);
+        io.sockets.emit("update users", users);
     });
 
 
