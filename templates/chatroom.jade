@@ -1,0 +1,44 @@
+doctype
+html
+	head
+		title= "FSE Chatroom"
+		link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous", rel='stylesheet', type='text/css')
+	body
+		.container 
+			.row 
+				.col-md-12 
+					h1 FSE Chatroom 
+			#join.row 
+				.col-md-4 
+					.panel.panel-info
+						.panel-heading Choose a nickname 
+						.panel-body 
+							input(type="text" class="form-control" id="nickname" placeholder="Nickname")
+						.panel-footer
+							form#join-form
+								button(class="btn btn-info" type="submit") Join Chatroom
+			#chatroom.row 
+				.col-md-4 
+					.panel.panel-info
+						.panel-heading Connected Users 
+						.panel-body(style="height:400px;max-height: 800;overflow-y: auto;") 
+							ul.media-list
+								li.media
+									.media-body
+										h5 Alex Deo 
+						.panel-footer
+							a#leave(href="#") Logout 
+				.col-md-8 
+					.panel.panel-info
+						.panel-heading Messages
+						.panel-body(id="messages-panel" style="height:400px;max-height: 800;overflow-y: auto;") 
+							ul.media-list(id="messages")
+						.panel-footer
+							form(id="send")
+								.input-group
+									input(type="text" class="form-control" id="m" placeholder="Enter Message")
+									span.input-group-btn
+										button(class="btn btn-info" type="submit") Send
+	script(type='text/javascript', src='/socket.io/socket.io.js')
+	script(type='text/javascript', src='http://code.jquery.com/jquery-1.11.1.js')
+	script(type='text/javascript', src='js/chatroom-client.js')

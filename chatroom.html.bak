@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  </head>
+  <body>
+
+<div id="join" class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>Welcome to FSE Chat</h1>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-xs-12">
+    		<form action="">
+      			<input id="nickname"/><button>Join Chatroom</button>
+    		</form>
+		</div>
+	</div>
+</div>
+<div id="chatroom" class="row" style="display:none">
+	<div class="col-xs-4">
+		Welcome <span id="user-nickname"></span>
+		<a href="#" id="leave"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a>
+	</div>
+	<div class="col-xs-8">
+		<input type="hidden" id="nickname" />
+    		<ul id="messages"></ul>
+    		<form id="send" action="">
+     		 <input id="m" autocomplete="off" /><button>Send</button>
+    		</form>
+	</div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  $('#chatroom').hide();
+  var socket = io();
+  $('#join form').submit(function(){
+    socket.emit('join', $('#nickname').val());
+    return false;
+  });
+
+  $('#send').submit(function(){
+    socket.emit('chat message', $('#m').val());
+    $('#m').val('');
+    return false;
+  });
+  
+  $('#leave').click(function(){
+    		socket.emit('disconnect', $('#nickname').val());
+		$('#join').show();
+		$('#chatroom').hide();
+		return false;
+ });
+
+  socket.on('user connected', function(nickname){
+	if (nickname == $('#nickname').val()){
+		$('#join').hide()
+		$('#chatroom').show()
+    		$('#nickname').val(nickname);
+	}
+	else{
+    		$('#messages').append($('<li>').text(nickname+" joined"));
+	}
+  });
+  socket.on('disconnect', function(nickname){
+	//alert(nickname);
+	if (nickname != $('#nickname').val()){
+    		$('#messages').append($('<li>').text(nickname+" joined"));
+	}
+
+  });
+  socket.on('chat message', function(msg){
+    $('#messages').append($('<li>').text(msg));
+  });
+
+
+
+</script>
+  </body>
+</html>

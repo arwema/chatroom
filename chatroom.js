@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -7,21 +8,32 @@ var users = {};
 var fs = require("fs");
 var file = "chatroom.db";
 var exists = fs.existsSync(file);
+var jade = require('jade');
 
 var sqlite3 = require("sqlite3").verbose();
 var db = new sqlite3.Database(file);
 
-
+/*
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/chatroom.html');
 });
+*/
 
+app.get('/', function(req, res){
+     res.render('chatroom');
+});
+
+app.use(express.static(__dirname + '/public'));
+
+app.set('views', __dirname + '/templates');
+app.set('view engine', 'jade');
+app.engine('jade', require('jade').__express);
 
 io.on('connection', function(socket){
 
   db.serialize(function() {
   if(!exists) {
-    db.run("CREATE TABLE message (message TEXT)");
+    db.run("CREATE TABLE messages (nickname TEXT, message TEXT, time TEXT)");
   }
   });
 
@@ -30,10 +42,11 @@ io.on('connection', function(socket){
         socket.emit("update", "You have connected to the server.");
         io.sockets.emit("user connected", name)
         io.sockets.emit("update-users", users);
-  	//load existing messages in the DB
-  	db.each("SELECT * FROM message", function(err, message) {
-  		socket.emit('chat message', message.message);
+  	//load existing messages from the DB
+  	db.each("SELECT * FROM messages", function(err, message) {
+  		socket.emit('chat message', message);
   	});
+	console.log(name+" connected");
     });
 
   socket.on("disconnect", function(){
@@ -46,10 +59,11 @@ io.on('connection', function(socket){
 
   socket.on('chat message', function(msg){
 	var current_time = new Date();
-	io.emit('chat message', users[socket.id]+" said at "+ current_time+": "+msg);
+	current_time = current_time.toDateString();
+	io.emit('chat message', {nickname:users[socket.id], time:current_time,message:msg});
 	db.serialize(function() {
-	var stmt = db.prepare("INSERT INTO message VALUES (?)");
-    		stmt.run(msg);
+	var stmt = db.prepare("INSERT INTO messages VALUES (?,?,?)");
+    		stmt.run(users[socket.id], msg, current_time);
 		stmt.finalize();
 	});
 
