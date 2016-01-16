@@ -13,18 +13,11 @@ var jade = require('jade');
 var sqlite3 = require("sqlite3").verbose();
 var db = new sqlite3.Database(file);
 
-/*
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/chatroom.html');
-});
-*/
-
 app.get('/', function(req, res){
      res.render('chatroom');
 });
 
 app.use(express.static(__dirname + '/public'));
-
 app.set('views', __dirname + '/templates');
 app.set('view engine', 'jade');
 app.engine('jade', require('jade').__express);
@@ -66,10 +59,7 @@ io.on('connection', function(socket){
     		stmt.run(users[socket.id], msg, current_time);
 		stmt.finalize();
 	});
-
-
-	
-  });
+     });
 });
 
 
