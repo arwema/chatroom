@@ -11,7 +11,8 @@
   "dependencies": {
     "express": "~4.13.3",
     "socket.io": "~1.4.0",
-    "jade":"latest",
-    "sqlite3": "~3.1.1"
+    "jade": "latest",
+    "sqlite3": "~3.1.1",
+    "underscore-node": "~0.1.2"
   }
 }

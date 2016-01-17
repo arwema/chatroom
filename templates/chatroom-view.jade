@@ -17,16 +17,18 @@ html
 								button(class="btn btn-info" type="submit") Join Chatroom
 				.col-md-4 
 			#chatroom.row 
-				.col-md-4 
+				.col-md-4.visible-lg
 					.panel.panel-info
 						.panel-heading Connected Users 
 						.panel-body(style="height:400px;max-height: 800;overflow-y: auto;") 
 							ul#users.media-list
 						.panel-footer
-							a#disconnect(href="#") Logout 
+							a.disconnect(href="#") Logout 
 				.col-md-8 
 					.panel.panel-info
 						.panel-heading Messages
+							span.hidden-lg(style="margin-left:20px") 
+								a.disconnect(href="#") Logout 
 						.panel-body(id="messages-panel" style="height:400px;max-height: 800;overflow-y: auto;") 
 							ul.media-list(id="messages")
 						.panel-footer

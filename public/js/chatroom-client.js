@@ -1,17 +1,35 @@
+var socket = io();
+
+$(window).bind('beforeunload',function(){
+	socket.emit('user disconnected', $('#nickname').val());
+});
+
 $('#chatroom').hide();
-  var socket = io();
   $('#join-form').submit(function(){
-    socket.emit('join', $('#nickname').val());
-    return false;
+	
+    var nickname=$.trim($("#nickname").val());
+	if(nickname.length == 0)
+	{
+		alert('Empty nickname');
+    		return;
+	}
+    socket.emit('join', nickname);
+    return ;
   });
 
   $('#send').submit(function(){
-    socket.emit('chat message', $('#m').val());
-    $('#m').val('');
-    return false;
+
+    var message=$.trim($("#m").val());
+	if(message.length == 0)
+	{
+    		return;
+	}
+
+    	socket.emit('chat message', message);
+    	$('#m').val('');
   });
   
-  $('#disconnect').click(function(){
+  $('.disconnect').click(function(){
                 socket.emit('user disconnected', $('#nickname').val());
                 $('#join').show();
                 $('#chatroom').hide();
@@ -43,7 +61,11 @@ $('#chatroom').hide();
   });
   socket.on('chat message', function(msg){
 	$('#messages').append("<li class='media'>"+ msg.message + "<br /> <small class='text-muted'> "+msg.nickname+"| "+msg.time+" <hr/></li>");
-	$("#messages-panel").animate({ scrollTop: $("#messages-panel").prop("scrollHeight") - $('#messages-panel').height() }, 300);
+	$("#messages-panel").animate({ scrollTop: $("#messages-panel").prop("scrollHeight") - $('#messages-panel').height() }, 30);
   });
+
+  socket.on('connection failure',function(msg){
+	alert(msg);
+ });
 
 
