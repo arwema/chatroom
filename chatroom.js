@@ -11,6 +11,8 @@ var chatroom = function (chatroom){
 
    var fs = require("fs");
    var exists = fs.existsSync(dbName);
+
+   //load messages from DB
    db.serialize(function() {
     		db.run("CREATE TABLE IF NOT EXISTS messages (nickname TEXT, message TEXT, time TEXT)");
    });

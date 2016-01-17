@@ -13,8 +13,8 @@ $('#chatroom').hide();
 		alert('Empty nickname');
     		return;
 	}
-    socket.emit('join', nickname);
-    return ;
+    	socket.emit('join', nickname);
+    	return false;
   });
 
   $('#send').submit(function(){
@@ -27,6 +27,7 @@ $('#chatroom').hide();
 
     	socket.emit('chat message', message);
     	$('#m').val('');
+    	return false;
   });
   
   $('.disconnect').click(function(){
